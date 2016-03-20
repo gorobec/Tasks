@@ -1,34 +1,53 @@
-package privious.asynchro_chat;
+package controller;
 
-
+import model.Message;
+import model.User;
 import privious.utils.IOUtils;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.concurrent.BlockingDeque;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.LinkedBlockingDeque;
 
-public class Server {
-    private final int PORT = 5555;
+/**
+ * Created by gorobec on 20.03.16.
+ */
+public class NewServer{
+    private static final String HISTORY_PATH = "src/main/resources/history.json";
+    private static final int PORT = 5555;
     private ServerSocket server;
-
-    private BlockingDeque<String> messages = new LinkedBlockingDeque<>(1);
+    private List<User> users;
+    private List<Message> history;
+    ExecutorService executorService;
+    private BlockingDeque<Message> messages = new LinkedBlockingDeque<>();
     private Set<Connection> clients = new HashSet<>();
-    public Server() {
+
+    public NewServer(){
+        executorService = Executors.newFixedThreadPool(5);
+        executorService.
+        try {
+            this.server = new ServerSocket(PORT);
+        } catch (IOException e) {
+            System.err.println("Can't connect to the port");
+            e.printStackTrace();
+        }
+        history = new ArrayList<>();
     }
+
     public void start () throws IOException {
         new Thread(new Runnable() {
             @Override
             public void run() {
                 while (true) {
                     try {
-                        String send = messages.take();
+                        Message send = messages.take();
                         for (Connection client : clients) {
                             client.out.println(send);
                             client.out.flush();
@@ -39,19 +58,20 @@ public class Server {
                 }
             }
         }).start();
-        try {
+        /*try {
             server = new ServerSocket(PORT);
         } catch (IOException e) {
             System.err.println("Can't connect to the port");
             e.printStackTrace();
             System.exit(-1);
-        }
+        }*/
 
         while (true){
             System.out.println("NewServer waiting...");
             Socket client = server.accept();
             Connection connection = new Connection(client);
-            connection.start();
+            executorService.submit(connection);
+//            connection.start();
             clients.add(connection);
             System.out.println("Client " + client.getInetAddress() + " connect!");
         }
@@ -59,14 +79,13 @@ public class Server {
 
 
     }
-
-
-
-
     private class Connection extends Thread{
+
         private Socket client;
+        private User user;
         private BufferedReader in;
         private PrintWriter out;
+        ObjectInputStream ois;
         private boolean state = true;
 
         public Connection (Socket socket) {
@@ -75,30 +94,33 @@ public class Server {
                 in = new BufferedReader
                         (new InputStreamReader(client.getInputStream()));
                 out = new PrintWriter(client.getOutputStream());
+                ois = new ObjectInputStream(client.getInputStream());
             } catch (IOException ignore) {/*NOP*/}
         }
         public void run () {
             try {
-                while (state) {
-                out.println("Welcome to the \"Hell yeah\" chat!\nWrite your message...");
-                out.flush();
-                while (true) {
-                    String message = in.readLine();
-                    if (message.equalsIgnoreCase("quit")) {
-                        state = false;
-                        break;
+//                todo validation
+//                    user = (User) ois.readObject();
+                    out.println(new Message("Welcome to the \"Artchat\"! Write your message..."));
+                    out.flush();
+                    while (true) {
+                        Message message = new Message(user, in.readLine());
+                        messages.put(message);
                     }
-                    messages.put(message);
-                }
-            }
-            } catch (Exception e) {/*NOP*/
-            }finally {
+            /*} catch (ClassNotFoundException e) {
+                e.printStackTrace();*/
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
                 try {
-                    messages.put((char) 27 + "[34mClient " + client.getInetAddress() + " leave chatroom");
+                    clients.remove(this);
+                    messages.put(new Message(String.format("%s leave chatroom", user)));
+                    close();
                 } catch (InterruptedException ignore) {
                    /*NOP*/
                 }
-                close();
             }
         }
 

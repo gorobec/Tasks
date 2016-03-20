@@ -23,7 +23,7 @@ public class SynchroServerSocket {
             e.printStackTrace();
             System.exit(-1);
         }
-        System.out.println("Server waiting...");
+        System.out.println("NewServer waiting...");
         Socket client = null;
         try {
             client = server.accept();

@@ -8,11 +8,14 @@ import java.awt.*;
  */
 public class MainFrame extends JFrame {
     JPanel mainPanel;
+    JMenuBar menuBar;
     public MainFrame() {
         super("ArtChat");
         setSize(600, 400);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
+        menuBar = new MenuBar();
+        setJMenuBar(menuBar);
         setLayout(new GridBagLayout());
         setVisible(true);
     }
