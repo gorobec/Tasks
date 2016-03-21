@@ -1,26 +1,23 @@
 package controller;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 
 public class ClientRun {
     public static void main(String[] args) throws IOException {
-        /*int count = 0;
 
+        Client client = new Client();
+        client.start();
+
+        try( BufferedReader console = new BufferedReader
+                (new InputStreamReader(System.in))) {
             while (true) {
-                final int finalCount = count;
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            new Client().start();
-                        } catch (IOException e) {
-                            System.out.println(finalCount + "!!!!!!!!!!");
-                        }
-                    }
-                }).start();
-                count++;
-            }*/
-        new Client().start();
+                client.writeMessage(console.readLine());
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 }

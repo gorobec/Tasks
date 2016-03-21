@@ -6,6 +6,17 @@ package model;
 public class User {
     private String nickName;
     private transient String password;
+    private String name;
+    private int age;
+    private String sex;
+
+    public User(String nickName, String password, String name, int age, String sex) {
+        this.nickName = nickName;
+        this.password = password;
+        this.name = name;
+        this.age = age;
+        this.sex = sex;
+    }
 
     public User(String nickName, String password){
         this.nickName = nickName;

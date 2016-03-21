@@ -18,7 +18,7 @@ public class TestGson {
             history.add(new Message(user, "Message" + i));
             Thread.sleep(2000);
         }
-        String fileName = "src/main/resources/history.json";
+        String fileName = "src/main/resources/ServerHistory.json";
         Writer writer = new BufferedWriter(new FileWriter(fileName, true));
         String jsonText = new Gson().toJson(history);
         System.out.println(jsonText);
