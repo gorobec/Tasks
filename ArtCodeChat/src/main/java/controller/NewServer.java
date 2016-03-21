@@ -75,7 +75,7 @@ public class NewServer{
         private BufferedReader in;
         private PrintWriter out;
         ObjectInputStream ois;
-        private boolean state = true;
+        private boolean isLogIn;
 
         public Connection (Socket socket) {
             this.client = socket;
@@ -89,7 +89,11 @@ public class NewServer{
         public void run () {
             try {
 //                todo validation
-//                    user = (User) ois.readObject();
+                while (!isLogIn){
+                    user = (User) ois.readObject();
+                    if(users.contains(user))
+
+                }
                     out.println(new Message("Welcome to the \"Artchat\"! Write your message..."));
                     out.flush();
                     while (true) {
@@ -101,6 +105,8 @@ public class NewServer{
             } catch (InterruptedException e) {
                 e.printStackTrace();
             } catch (IOException e) {
+                e.printStackTrace();
+            } catch (ClassNotFoundException e) {
                 e.printStackTrace();
             } finally {
                 try {
