@@ -13,6 +13,11 @@ public class ClientRun {
     public static void main(String[] args) throws IOException, FieldLengthIsToBigException, IncorrectPasswordRepeatException {
         /*int count = 0;
 
+        Client client = new Client();
+        client.start();
+
+        try( BufferedReader console = new BufferedReader
+                (new InputStreamReader(System.in))) {
             while (true) {
                 final int finalCount = count;
                 new Thread(new Runnable() {

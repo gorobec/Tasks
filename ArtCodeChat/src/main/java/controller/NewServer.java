@@ -20,7 +20,7 @@ import java.util.concurrent.LinkedBlockingDeque;
  * Created by gorobec on 20.03.16.
  */
 public class NewServer{
-    private static final String HISTORY_PATH = "src/main/resources/history.json";
+    private static final String HISTORY_PATH = "src/main/resources/ServerHistory.json";
     private static final int PORT = 5555;
     private ServerSocket server;
     private List<User> users;
@@ -31,7 +31,6 @@ public class NewServer{
 
     public NewServer(){
         executorService = Executors.newFixedThreadPool(5);
-        executorService.
         try {
             this.server = new ServerSocket(PORT);
         } catch (IOException e) {
@@ -42,38 +41,28 @@ public class NewServer{
     }
 
     public void start () throws IOException {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                while (true) {
-                    try {
-                        Message send = messages.take();
-                        for (Connection client : clients) {
-                            client.out.println(send);
-                            client.out.flush();
-                        }
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
+        new Thread(() -> {
+            while (true) {
+                try {
+                    Message send = messages.take();
+                    for (Connection client : clients) {
+                        client.out.println(send);
+                        client.out.flush();
                     }
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
             }
         }).start();
-        /*try {
-            server = new ServerSocket(PORT);
-        } catch (IOException e) {
-            System.err.println("Can't connect to the port");
-            e.printStackTrace();
-            System.exit(-1);
-        }*/
 
         while (true){
             System.out.println("NewServer waiting...");
             Socket client = server.accept();
+            System.out.println("Client " + client.getInetAddress() + " connect!");
             Connection connection = new Connection(client);
             executorService.submit(connection);
 //            connection.start();
             clients.add(connection);
-            System.out.println("Client " + client.getInetAddress() + " connect!");
         }
 
 
@@ -86,7 +75,7 @@ public class NewServer{
         private BufferedReader in;
         private PrintWriter out;
         ObjectInputStream ois;
-        private boolean state = true;
+        private boolean isLogIn;
 
         public Connection (Socket socket) {
             this.client = socket;
@@ -100,7 +89,11 @@ public class NewServer{
         public void run () {
             try {
 //                todo validation
-//                    user = (User) ois.readObject();
+                while (!isLogIn){
+                    user = (User) ois.readObject();
+                    if(users.contains(user))
+
+                }
                     out.println(new Message("Welcome to the \"Artchat\"! Write your message..."));
                     out.flush();
                     while (true) {
@@ -112,6 +105,8 @@ public class NewServer{
             } catch (InterruptedException e) {
                 e.printStackTrace();
             } catch (IOException e) {
+                e.printStackTrace();
+            } catch (ClassNotFoundException e) {
                 e.printStackTrace();
             } finally {
                 try {

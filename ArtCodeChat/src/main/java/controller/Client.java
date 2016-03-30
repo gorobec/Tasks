@@ -2,11 +2,7 @@ package controller;
 
 
 
-
-import model.FieldLengthIsToBigException;
-import model.Gender;
-import model.IncorrectPasswordRepeatException;
-import model.User;
+import model.*;
 import privious.utils.IOUtils;
 
 import java.io.*;
@@ -94,16 +90,11 @@ public class Client {
         Thread messageSender = new MessageSender();
         messageSender.start();
     }
-
-    private void close() throws IOException {
-        try {
-            IOUtils.closeIn(client.getInputStream());
-            IOUtils.closeOut(client.getOutputStream());
-        } catch (IOException e) {
-            System.err.println("Socket closed");
-        } finally {
-            client.close();
+    public User register(String login, String password, String repeat, String name, int age, String sex) throws NotEqualPasswordException {
+        if(!password.equals(repeat)){
+            throw  new NotEqualPasswordException();
         }
+            return new User(login, password, name, age, sex);
     }
     /**
      * Thread is responsible for message sending
