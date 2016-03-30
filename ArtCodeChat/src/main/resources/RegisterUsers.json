@@ -1,0 +1,98 @@
+[
+  {
+    "nickName": "admin",
+    "password": "admin",
+    "name": "kl",
+    "surname": "vb",
+    "birthDate": {
+      "year": 2016,
+      "month": 3,
+      "day": 29
+    },
+    "gender": "MALE"
+  },
+  {
+    "nickName": "gorobec",
+    "password": "1234",
+    "name": "kl",
+    "surname": "vb",
+    "birthDate": {
+      "year": 2016,
+      "month": 3,
+      "day": 29
+    },
+    "gender": "MALE"
+  },
+  {
+    "nickName": "user",
+    "password": "user",
+    "name": "kl",
+    "surname": "vb",
+    "birthDate": {
+      "year": 2016,
+      "month": 3,
+      "day": 29
+    },
+    "gender": "FEMALE"
+  },
+  {
+    "nickName": "z",
+    "password": "z",
+    "name": "z",
+    "surname": "z",
+    "birthDate": {
+      "year": 2016,
+      "month": 3,
+      "day": 30
+    },
+    "gender": "MALE"
+  },
+  {
+    "nickName": "x",
+    "password": "x",
+    "name": "x",
+    "surname": "x",
+    "birthDate": {
+      "year": 2016,
+      "month": 3,
+      "day": 30
+    },
+    "gender": "MALE"
+  },
+  {
+    "nickName": "c",
+    "password": "c",
+    "name": "c",
+    "surname": "c",
+    "birthDate": {
+      "year": 2016,
+      "month": 3,
+      "day": 30
+    },
+    "gender": "MALE"
+  },
+  {
+    "nickName": "v",
+    "password": "v",
+    "name": "v",
+    "surname": "v",
+    "birthDate": {
+      "year": 2016,
+      "month": 3,
+      "day": 30
+    },
+    "gender": "MALE"
+  },
+  {
+    "nickName": "b",
+    "password": "b",
+    "name": "b",
+    "surname": "b",
+    "birthDate": {
+      "year": 2016,
+      "month": 3,
+      "day": 30
+    },
+    "gender": "MALE"
+  }
+]

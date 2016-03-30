@@ -2,6 +2,7 @@ package model;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 
 /**
  * Created by gorobec on 20.03.16.
@@ -9,6 +10,7 @@ import java.time.LocalTime;
 public class Message {
     private LocalDate date;
     private LocalTime time;
+    private DateTimeFormatter fmt = DateTimeFormatter.ofPattern("HH:mm:ss");;
     private User user;
     private String text;
 
@@ -42,8 +44,7 @@ public class Message {
     }
 
     @Override
-//    todo diff colours
     public String toString() {
-        return String.format("%s %s > %s", time, user == null ? "" : user, text);
+        return String.format("%s %s > %s", time.format(fmt),user == null ? "" : user, text);
     }
 }
