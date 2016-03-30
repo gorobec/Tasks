@@ -54,12 +54,26 @@ public class Client {
         return false;
     }
 
+      /**
+     * Creates two threads:
+     *  1. MessageReceiver() - monitoring for messages from server
+     *  2. MessageSender() - wait for users messages, send them to server
+     * */
+    public void startChat() throws IOException {
+
+
+        Thread messageReceiver = new MessageReceiver();
+        messageReceiver.start();
+
+        Thread messageSender = new MessageSender();
+        messageSender.start();
+    }
     public boolean register(String nickName, String password, String passwordRepeat,String name, String surname, LocalDate birthDate, Gender gender) throws FieldLengthIsToBigException, IncorrectPasswordRepeatException, IOException {
         User user = new User(nickName, password, passwordRepeat,name, surname, birthDate, gender);
         Socket registerClient = new Socket(IP, USER_SERVER_SOCKET_PORT);
 //todo empty fields
         try (DataInputStream objectInputStream = new DataInputStream(registerClient.getInputStream());
-                ObjectOutputStream objectOutputStream = new ObjectOutputStream(registerClient.getOutputStream())){
+             ObjectOutputStream objectOutputStream = new ObjectOutputStream(registerClient.getOutputStream())){
 
             objectOutputStream.writeObject(user);
             objectOutputStream.flush();
@@ -74,27 +88,6 @@ public class Client {
 
     public boolean logOut(){
         return false;
-    }
-
-    /**
-     * Creates two threads:
-     *  1. MessageReceiver() - monitoring for messages from server
-     *  2. MessageSender() - wait for users messages, send them to server
-     * */
-    public void startChat() throws IOException {
-
-
-        Thread messageReceiver = new MessageReceiver();
-        messageReceiver.start();
-
-        Thread messageSender = new MessageSender();
-        messageSender.start();
-    }
-    public User register(String login, String password, String repeat, String name, int age, String sex) throws NotEqualPasswordException {
-        if(!password.equals(repeat)){
-            throw  new NotEqualPasswordException();
-        }
-            return new User(login, password, name, age, sex);
     }
     /**
      * Thread is responsible for message sending

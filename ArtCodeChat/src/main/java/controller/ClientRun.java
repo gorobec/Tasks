@@ -11,27 +11,7 @@ import java.time.LocalDate;
 
 public class ClientRun {
     public static void main(String[] args) throws IOException, FieldLengthIsToBigException, IncorrectPasswordRepeatException {
-        /*int count = 0;
 
-        Client client = new Client();
-        client.start();
-
-        try( BufferedReader console = new BufferedReader
-                (new InputStreamReader(System.in))) {
-            while (true) {
-                final int finalCount = count;
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            new Client().startChat();
-                        } catch (IOException e) {
-                            System.out.println(finalCount + "!!!!!!!!!!");
-                        }
-                    }
-                }).startChat();
-                count++;
-            }*/
         Client client = new Client();
         boolean isLogIn = false;
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
