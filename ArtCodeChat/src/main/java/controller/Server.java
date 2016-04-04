@@ -143,7 +143,12 @@ public class Server {
 
                     while (client.isConnected()) {
 //                        locked method, wait for client message
-                        String receivedText = in.readLine();
+                        String receivedText;
+                        receivedText = in.readLine();
+                        while (in.ready()){
+
+                            receivedText += "\n" + in.readLine();
+                        }
 //                        if client disconnect while server waits for message
 //                        client send null
                         if(receivedText == null) {

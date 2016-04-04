@@ -94,5 +94,17 @@
       "day": 30
     },
     "gender": "MALE"
+  },
+  {
+    "nickName": "Kolya",
+    "password": "1234",
+    "name": "Olya",
+    "surname": "Lazeba",
+    "birthDate": {
+      "year": 2016,
+      "month": 4,
+      "day": 2
+    },
+    "gender": "MALE"
   }
 ]

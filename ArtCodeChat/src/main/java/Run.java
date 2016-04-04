@@ -1,4 +1,5 @@
 import view.MainFrame;
+import view.login_window.LoginFrame;
 
 import javax.swing.*;
 
@@ -12,7 +13,7 @@ public class Run {
         } catch (UnsupportedLookAndFeelException | ClassNotFoundException | InstantiationException | IllegalAccessException e) {
             e.printStackTrace();
         }
-
-        new MainFrame();
+        new LoginFrame();
+//        new MainFrame();
     }
 }

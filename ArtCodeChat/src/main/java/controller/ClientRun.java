@@ -38,6 +38,15 @@ public class ClientRun {
             isLogIn = client.logIn(login, pass);
         }
         System.out.println("Log in");
-        client.startChat();
+//        client.startChat();
+        try(BufferedReader console = new BufferedReader (new InputStreamReader(System.in))) {
+            while (true) {
+                String writeMessage = console.readLine();
+                client.send(writeMessage);
+                if (writeMessage.equalsIgnoreCase("quit")) {
+                    break;
+                }
+            }
+        } catch (Exception ignore) {/*NOP*/}
     }
     }

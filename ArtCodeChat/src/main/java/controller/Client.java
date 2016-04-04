@@ -4,12 +4,15 @@ package controller;
 
 import model.*;
 import privious.utils.IOUtils;
+import view.MainFrame;
 
 import java.io.*;
 import java.net.Socket;
 import java.time.LocalDate;
+import java.util.Observable;
+import java.util.Observer;
 
-public class Client {
+public class Client extends Observable{
     private final int PORT = 5555;
     private static final int USER_SERVER_SOCKET_PORT = 6789;
     private final String IP = "127.0.0.1";
@@ -19,6 +22,10 @@ public class Client {
     private OutputStream os;
     private DataInputStream ois;
     private ObjectOutputStream oos;
+    private MessageSender messageSender;
+    private Observer observer;
+
+
 
     public Client() throws IOException {
         client = new Socket(IP, PORT);
@@ -59,14 +66,17 @@ public class Client {
      *  1. MessageReceiver() - monitoring for messages from server
      *  2. MessageSender() - wait for users messages, send them to server
      * */
-    public void startChat() throws IOException {
+    public void startChat(Observer observer) throws IOException {
 
+        this.observer = observer;
+        addObserver(observer);
+
+        messageSender = new MessageSender();
+        messageSender.start();
 
         Thread messageReceiver = new MessageReceiver();
         messageReceiver.start();
 
-        Thread messageSender = new MessageSender();
-        messageSender.start();
     }
     public boolean register(String nickName, String password, String passwordRepeat,String name, String surname, LocalDate birthDate, Gender gender) throws FieldLengthIsToBigException, IncorrectPasswordRepeatException, IOException {
         User user = new User(nickName, password, passwordRepeat,name, surname, birthDate, gender);
@@ -105,6 +115,8 @@ public class Client {
                 while (client.isConnected()) {
                         serverMessage = in.readLine();
                     if (serverMessage != null) {
+                        setChanged();
+                        notifyObservers(serverMessage);
                         System.out.println((char) 27 + "[34m" + serverMessage);
                         if (serverMessage.equalsIgnoreCase("quit")) {
                             break;
@@ -118,9 +130,19 @@ public class Client {
     }
 
     private class MessageSender extends Thread{
+       private PrintWriter out;
+
+        public MessageSender() {
+            try {
+                this.out = new PrintWriter(client.getOutputStream());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
         @Override
         public void run() {
-            try(PrintWriter out = new PrintWriter(client.getOutputStream());
+            /*try(PrintWriter out = new PrintWriter(client.getOutputStream());
                  BufferedReader console = new BufferedReader (new InputStreamReader(System.in))) {
                 while (isAlive()) {
                     String writeMessage = console.readLine();
@@ -130,7 +152,19 @@ public class Client {
                         break;
                     }
                 }
-            } catch (Exception ignore) {/*NOP*/}
+            } catch (Exception ignore) {*//*NOP*//*}*/
+
+            /*while (true){
+
+            }*/
         }
+
+        public void sendMessage(String message){
+            out.println(message);
+            out.flush();
+        }
+    }
+    public void send(String message){
+        messageSender.sendMessage(message);
     }
 }
